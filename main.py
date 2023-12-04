@@ -16,7 +16,7 @@ def buscar_arquivo():
 
     # Mostrar os arquivos encontrados
     if arquivos_encontrados:
-        messagebox.showinfo("Informativo", f"Achei, pae!")
+        messagebox.showinfo("Informativo", f"Achei!")
         
         # Habilitar o input das informações
         output_text.configure(state='normal')
@@ -33,7 +33,7 @@ def buscar_arquivo():
         # Janela de erro
         messagebox.showerror("Erro", f"Só perda de tempo!")
     
-    output_text.insert(tk.END, "\nOh o tanto que eu achei ai oh! Busca finalizada.\n")
+    output_text.insert(tk.END, "\nBusca finalizada.\n")
     output_text.update_idletasks()
 
 
@@ -53,7 +53,7 @@ def __buscador_de_arquivos(diretorio, extencao):
 
 
 root = tk.Tk()
-root.title("Busca o Arquivo no Inferno")
+root.title("Buscador de Arquivo 1.5")
 root.geometry("500x400")
 
 # Criando rótulos
