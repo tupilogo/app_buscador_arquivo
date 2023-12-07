@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import scrolledtext, messagebox
 import os
+from tkinter.filedialog import askdirectory
 
 
 def buscar_arquivo():
@@ -52,9 +53,29 @@ def __buscador_de_arquivos(diretorio, extencao):
     return arquivos_pst
 
 
+def selecionar_caminho_pasta(elemento: tk.Entry) -> str:
+    '''
+    ## Selecionar Caminho Pasta
+    ---
+    Seleciona caminho da pasta para criar um novo novo projeto
+    ### Atribuições
+    ---
+    parâmetros:
+        elemento : tkinter.Entry
+
+    return pasta_selecionada : str
+    '''
+    try:
+        pasta_selecionada = askdirectory()
+        elemento.delete(0, tk.END)  # Limpa o conteúdo atual do Entry
+        elemento.insert(0, pasta_selecionada)  # Insere o novo caminho no Entry
+    except FileExistsError as e:
+        messagebox.showerror("Erro", "Erro ao encontrar pasta!")
+        print("Erro", "Erro ao encontrar pasta!", e)
+    return pasta_selecionada
+
 root = tk.Tk()
 root.title("Buscador de Arquivo 1.5")
-root.geometry("500x400")
 
 # Criando rótulos
 label_caminho = tk.Label(root, text="Caminho do arquivo que deseja buscar:")
@@ -64,6 +85,10 @@ label_caminho.pack()
 entry_caminho = tk.Entry(root)
 entry_caminho.pack()
 
+# Busca a pasta e retorna na
+botao_buscar_pasta = tk.Button(root, text="Buscar Pasta...", command=lambda: selecionar_caminho_pasta(elemento=entry_caminho))
+botao_buscar_pasta.pack()
+
 label_extensao = tk.Label(root, text="Extensão do arquivo:")
 label_extensao.pack()
 
@@ -72,7 +97,7 @@ entry_extensao = tk.Entry(root)
 entry_extensao.pack()
 
 # Mostrar o status do sistema
-output_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=200, height=15)
+output_text = scrolledtext.ScrolledText(root, wrap=tk.WORD)
 output_text.pack(padx=10, pady=10)
 
 # Botão para iniciar a busca
