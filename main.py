@@ -75,7 +75,7 @@ def selecionar_caminho_pasta(elemento: tk.Entry) -> str:
     return pasta_selecionada
 
 root = tk.Tk()
-root.title("Buscador de Arquivo 1.5")
+root.title("Buscador de Arquivo")
 
 # Criando rótulos
 label_caminho = tk.Label(root, text="Caminho do arquivo que deseja buscar:")
