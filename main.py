@@ -5,15 +5,15 @@ from tkinter.filedialog import askdirectory
 
 
 def buscar_arquivo():
-    caminho = entry_caminho.get()
-    extensao = entry_extensao.get()
+    caminho = input_caminho.get()
+    extensao = input_extensao.get()
 
     # Adiciona a mensagem ao widget Text
     output_text.insert(tk.END, "Tenha pasciência, estou entrando no limbo...\n\n")
     output_text.update_idletasks()
     
     # Buscar arquivos .pst no diretório e subdiretórios
-    arquivos_encontrados = __buscador_de_arquivos(diretorio=caminho, extencao=extensao)
+    arquivos_encontrados = __buscador_de_arquivos(nome_arquivo="tupi", diretorio=caminho, extencao=extensao)
 
     # Mostrar os arquivos encontrados
     if arquivos_encontrados:
@@ -44,11 +44,11 @@ def limpar_tela():
     output_text.configure(state='disabled')
 
 
-def __buscador_de_arquivos(diretorio, extencao):
+def __buscador_de_arquivos(nome_arquivo:str, diretorio, extencao):
     arquivos_pst = []
     for pasta_raiz, sub_pastas, arquivos in os.walk(diretorio):
         for arquivo in arquivos:
-            if arquivo.endswith(extencao):
+            if arquivo.endswith(extencao) and nome_arquivo in arquivo:
                 arquivos_pst.append(os.path.join(pasta_raiz, arquivo))
     return arquivos_pst
 
@@ -74,38 +74,46 @@ def selecionar_caminho_pasta(elemento: tk.Entry) -> str:
         print("Erro", "Erro ao encontrar pasta!", e)
     return pasta_selecionada
 
+
 root = tk.Tk()
+frame_buscar_arquivo = tk.Frame(root)
+frame_extencao_arquivo = tk.Frame(root)
+frame_envio_requisicao = tk.Frame(root)
+
+frame_buscar_arquivo.pack(side=tk.TOP, padx=10, pady=10)
+frame_extencao_arquivo.pack(side=tk.TOP, padx=10, pady=10)
+frame_envio_requisicao.pack(side=tk.BOTTOM, padx=10, pady=10)
+
 root.title("Buscador de Arquivo")
 
-# Criando rótulos
-label_caminho = tk.Label(root, text="Caminho do arquivo que deseja buscar:")
-label_caminho.pack()
-
+# Rótulo do input do caminho do arquivo
+label_caminho = tk.Label(frame_buscar_arquivo, text="Caminho do arquivo:")
+label_caminho.pack(side=tk.LEFT)
 # Entrada para o caminho do arquivo
-entry_caminho = tk.Entry(root)
-entry_caminho.pack()
+input_caminho = tk.Entry(frame_buscar_arquivo, width=50)
+input_caminho.pack(side=tk.LEFT)
+# Busca a pasta e retorna o caminho do arquivo
+botao_buscar_pasta = tk.Button(frame_buscar_arquivo, text="Buscar Pasta...", command=lambda: selecionar_caminho_pasta(elemento=input_caminho))
+botao_buscar_pasta.pack(side=tk.LEFT, padx=5)
 
-# Busca a pasta e retorna na
-botao_buscar_pasta = tk.Button(root, text="Buscar Pasta...", command=lambda: selecionar_caminho_pasta(elemento=entry_caminho))
-botao_buscar_pasta.pack()
 
-label_extensao = tk.Label(root, text="Extensão do arquivo:")
-label_extensao.pack()
-
+# Rótulo do input da extenção do arquivo
+label_extensao = tk.Label(frame_extencao_arquivo, text="Extensão do arquivo:")
+label_extensao.pack(side=tk.LEFT)
 # Entrada para a extensão do arquivo
-entry_extensao = tk.Entry(root)
-entry_extensao.pack()
+input_extensao = tk.Entry(frame_extencao_arquivo, width=5)
+input_extensao.pack(side=tk.LEFT)
 
 # Mostrar o status do sistema
 output_text = scrolledtext.ScrolledText(root, wrap=tk.WORD)
 output_text.pack(padx=10, pady=10)
 
 # Botão para iniciar a busca
-botao_buscar = tk.Button(root, text="Buscar Arquivo", command=buscar_arquivo)
-botao_buscar.pack()
+botao_buscar = tk.Button(frame_envio_requisicao, text="Buscar Arquivo", command=buscar_arquivo, width=20, height=2)
+botao_buscar.pack(side=tk.LEFT, padx=10, pady=10)
 
 # Botão para limpar a tela de busca
-botao_limpar = tk.Button(root, text="Limpar tela de saída", command=limpar_tela)
-botao_limpar.pack()
+botao_limpar = tk.Button(frame_envio_requisicao, text="Limpar tela de saída", command=limpar_tela, width=20, height=2)
+botao_limpar.pack(side=tk.LEFT)
 
 root.mainloop()
